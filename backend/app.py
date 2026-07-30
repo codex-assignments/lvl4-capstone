@@ -21,6 +21,7 @@ def get_client():
     if auth_header and auth_header.startswith("Bearer "):
         token = auth_header.split(" ")[1]
         user_client=create_client(SUPABASE_URL,SUPABASE_KEY)
+        # attach user's Json web token to all outgoing http requests
         user_client.postgrest.auth(token)
         return user_client
     return supabase
