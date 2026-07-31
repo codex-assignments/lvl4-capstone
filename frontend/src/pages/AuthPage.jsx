@@ -28,7 +28,7 @@ export default function AuthPage() {
           Application Tracker
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Log in or sign up to manage your job applications
+          Log in to manage your job applications.
         </Typography>
       </Box>
 

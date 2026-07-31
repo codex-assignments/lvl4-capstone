@@ -2,7 +2,7 @@
 # AppTrack -- a software job application tracker
 This is an app that will help track SW dev applications, particularly information such as stage/status, date applied/last contact, hiring manager info including email, the tech stack used in the job description, and job role/title. 
 
-* One page allows management of the board -- create, update, delete -- based on the user. Any user can sign up, but users can only edit and delete entries they've created. This way visitors/graders can test it out without affecting any important (to the host) data. 
+* One page allows management of the board -- create, update, delete -- based on the user. Only logged in users can edit and delete entries. This way visitors/graders can get the visualizations and filters. 
 
 * The status board/log can be filtered based on stack tags, stage/status of application, user, and a global search bar where you can search for strings such as company name, hiring manager, job role/title.
 

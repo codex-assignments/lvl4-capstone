@@ -83,13 +83,12 @@ export function ResourceProvider({ children }) {
     }
   }
 
-  // create -- token saved from login required
+
   async function addResource(newItem) {
     if (!user || !user.id) {
       throw new Error("You must be logged in to create an application.");
     }
 
-    // Frontend payload construction tied strictly to the authenticated user
     const payload = {
       ...newItem,
       user_id: user.id,

@@ -3,8 +3,6 @@ import { useResources } from "../context/ResourceContext";
 import {
   Box,
   Paper,
-  Tabs,
-  Tab,
   TextField,
   Button,
   Typography,
@@ -12,32 +10,20 @@ import {
 } from "@mui/material";
 
 export default function AuthForm({ onSuccess }) {
-  const { login, signup } = useResources();
-    const [tab, setTab] = useState(0);
-    // toggle tab view, if set to 0 = login, 1 = sign up
+  const { login } = useResources();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const handleTabChange = (event, newTab) => {
-    setTab(newTab);
-    setError(null);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-      try {
-        // log in or sign up
-      if (tab === 0) {
-        await login(email, password);
-      } else {
-        await signup(email, password);
-        await login(email, password);
-      }
+    try {
+      // log in only
+      await login(email, password);
 
       if (onSuccess) {
         onSuccess();
@@ -54,13 +40,6 @@ export default function AuthForm({ onSuccess }) {
       elevation={3}
       sx={{ maxWidth: 420, mx: "auto", p: 4, borderRadius: 2 }}
     >
-      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-        <Tabs value={tab} onChange={handleTabChange} variant="fullWidth">
-          <Tab label="Log In" />
-          <Tab label="Sign Up" />
-        </Tabs>
-      </Box>
-
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
@@ -72,7 +51,7 @@ export default function AuthForm({ onSuccess }) {
           variant="h6"
           sx={{ mb: 2, textAlign: "center", fontWeight: "bold" }}
         >
-          {tab === 0 ? "Welcome Back" : "Create Account"}
+          Welcome Back
         </Typography>
 
         <TextField
@@ -105,7 +84,7 @@ export default function AuthForm({ onSuccess }) {
           disabled={loading}
           sx={{ py: 1.2, fontWeight: "bold" }}
         >
-          {loading ? "Processing..." : tab === 0 ? "Log In" : "Sign Up"}
+          {loading ? "Processing..." : "Log In"}
         </Button>
       </Box>
     </Paper>

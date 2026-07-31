@@ -50,7 +50,7 @@ const navigate = useNavigate();
             </div>
           ) : (
             <NavLink to="/login" className="login-btn">
-              Login / Sign Up
+              Login / Manage
             </NavLink>
           )}
         </div>

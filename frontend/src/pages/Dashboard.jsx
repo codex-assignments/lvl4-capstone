@@ -43,74 +43,52 @@ export default function Dashboard() {
     return { total, active, interviews, offers };
   }, [resources]);
 
-  // build sankey diagram from metrics/resources
-  // need counts, nodes, and links
+  // build sankey diagram from metrics/resources with dynamic stage skipping
   const sankeyData = useMemo(() => {
-    if (!resources) return null;
+    if (!resources || resources.length === 0) return null;
 
-    // initalize counts for each stage
-    const counts = {
-      Applied: resources.length,
-      Screening: 0,
-      Technical: 0,
-      Interview: 0,
-      Offer: 0,
-      Rejected: 0,
-    };
+    const linkCounts = new Map();
+    const activeNodeIds = new Set(["Applied"]);
 
     resources.forEach((item) => {
-      if (item.has_screening) counts.Screening += 1;
-      if (item.has_technical) counts.Technical += 1;
-      if (item.has_interview) counts.Interview += 1;
-      if (item.has_offer) counts.Offer += 1;
-      if (item.has_rejected) counts.Rejected += 1;
+      const path = ["Applied"];
+      if (item.has_screening) path.push("Screening");
+      if (item.has_technical) path.push("Technical");
+      if (item.has_interview) path.push("Interview");
+      if (item.has_offer) {
+        path.push("Offer");
+      } else if (item.has_rejected) {
+        path.push("Rejected");
+      }
+      for (let i = 0; i < path.length - 1; i++) {
+        const source = path[i];
+        const target = path[i + 1];
+        activeNodeIds.add(source);
+        activeNodeIds.add(target);
+        const key = `${source}->${target}`;
+        linkCounts.set(key, (linkCounts.get(key) || 0) + 1);
+      }
     });
 
-    // nodes, list of visual blocks that a sankey diagram links up from left to right for the same object
-    const nodes = [
-      { id: "Applied" },
-      { id: "Screening" },
-      { id: "Technical" },
-      { id: "Interview" },
-      { id: "Offer" },
-      { id: "Rejected" },
-    ].filter((node) => {
-      if (node.id === "Applied") return true;
-      return counts[node.id] > 0;
-    });
+    // stage order, left to right columns
+    const masterOrder = [
+      "Applied",
+      "Screening",
+      "Technical",
+      "Interview",
+      "Offer",
+      "Rejected",
+    ];
 
-    // create the links between starting point node and ending point node
-    const links = [];
-    if (counts.Screening > 0)
-      links.push({
-        source: "Applied",
-        target: "Screening",
-        value: counts.Screening,
-      });
-    if (counts.Technical > 0)
-      links.push({
-        source: "Screening",
-        target: "Technical",
-        value: counts.Technical,
-      });
-    if (counts.Interview > 0)
-      links.push({
-        source: "Technical",
-        target: "Interview",
-        value: counts.Interview,
-      });
-    if (counts.Offer > 0)
-      links.push({
-        source: "Interview",
-        target: "Offer",
-        value: counts.Offer,
-      });
-    if (counts.Rejected > 0)
-      links.push({
-        source: "Applied",
-        target: "Rejected",
-        value: counts.Rejected,
-      });
+    //  filter so only include ones that actually exist in the data currently
+    const nodes = masterOrder
+      .filter((id) => activeNodeIds.has(id))
+      .map((id) => ({ id }));
+
+    const links = Array.from(linkCounts.entries()).map(([key, value]) => {
+      const [source, target] = key.split("->");
+      return { source, target, value };
+    });
 
     return { nodes, links };
   }, [resources]);
