@@ -1,17 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from "react-router-dom";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router";
 // import wrapper function to wrap around the entire app
 import { ResourceProvider } from "./context/ResourceContext";
-import './index.css'
-import App from './App.jsx'
+import App from "./App.jsx";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ResourceProvider>
-      <App />
-    </ResourceProvider>
+        <App />
+      </ResourceProvider>
     </BrowserRouter>
   </StrictMode>,
-)
+);
