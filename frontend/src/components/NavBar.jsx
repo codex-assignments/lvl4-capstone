@@ -44,7 +44,7 @@ const navigate = useNavigate();
             isActive ? "nav-link-active nav-link" : "nav-link"
           }
         >
-          {token ? "Manage / Add" : "Login"}
+
         </NavLink>
 
         {/* clickable user email and logout btn, if logged in, otherwise show Sign in directing to auth component */}

@@ -1,0 +1,383 @@
+/* ==========================================================================
+   1. Global & Layout Resets
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   2. Page Headers & State Views
+   ========================================================================== */
+.status-log-page h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #101828;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+  font-size: 1.1rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px dashed #dee2e6;
+}
+
+/* ==========================================================================
+   3. Responsive Grid System (Wider Cards)
+   ========================================================================== */
+/* Mobile (Small): 1 card across */
+.log-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Tablet / Small Laptops: 2 cards across */
+@media (min-width: 768px) {
+  .log-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop / Large Screens: Max 3 wide cards across */
+@media (min-width: 1100px) {
+  .log-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ==========================================================================
+   4. Log Card Styling (Modern & Polished)
+   ========================================================================== */
+.log-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #eaecf0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle top border highlight on hover */
+.log-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.log-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.03);
+  border-color: #d0d5dd;
+}
+
+.log-card:hover::before {
+  opacity: 1;
+}
+
+/* Card Header */
+.log-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.log-company {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #101828;
+  letter-spacing: -0.01em;
+}
+
+.log-title {
+  display: block;
+  font-size: 0.95rem;
+  color: #475467;
+  font-weight: 500;
+  margin-top: 0.15rem;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: #f2f4f7;
+  color: #344054;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.status-badge.applied {
+  background-color: #eff8ff;
+  color: #175cd3;
+  border: 1px solid #b2ddff;
+}
+
+.status-badge.phone-screen,
+.status-badge.screening {
+  background-color: #fffbfa;
+  color: #c4320a;
+  border: 1px solid #fecdca;
+}
+
+.status-badge.interviewing,
+.status-badge.technical-assessment {
+  background-color: #f8f5ff;
+  color: #6941c6;
+  border: 1px solid #e9d7fe;
+}
+
+.status-badge.offer-received {
+  background-color: #ecfdf3;
+  color: #027a48;
+  border: 1px solid #abefc6;
+}
+
+.status-badge.rejected {
+  background-color: #fef3f2;
+  color: #b42318;
+  border: 1px solid #fecdca;
+}
+
+/* Metadata Row (Location, Salary, Dates) */
+.log-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #475467;
+}
+
+.log-card-meta span {
+  background: #f8fafc;
+  color: #334155;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  font-weight: 500;
+}
+
+/* Detail Sections */
+.log-contact,
+.log-tech,
+.log-resume {
+  font-size: 0.875rem;
+  color: #344054;
+  line-height: 1.4;
+}
+
+.log-contact strong,
+.log-tech strong,
+.log-resume strong {
+  color: #101828;
+  font-weight: 600;
+}
+
+/* Clickable Email Button */
+.copy-email-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0284c7;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  margin-left: 0.25rem;
+}
+
+.copy-email-btn:hover {
+  background-color: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0369a1;
+}
+
+/* External Job Link */
+.log-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.log-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Expandable Notes Toggle & Container */
+.log-notes-container {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.notes-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.notes-toggle-btn:hover {
+  color: #0f172a;
+}
+
+.log-notes {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border-left: 3px solid #94a3b8;
+  font-size: 0.85rem;
+}
+
+.log-notes p {
+  margin: 0;
+  color: #334155;
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Navigation Bar Styling
+   ========================================================================== */
+.navbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaecf0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+/* Logo Link */
+.nav-logo a {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #2563eb;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-logo a:hover {
+  color: #1d4ed8;
+}
+
+/* Nav Links Container */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Base Link Style */
+.nav-link {
+  text-decoration: none;
+  color: #475467;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  color: #101828;
+  background-color: #f8fafc;
+}
+
+/* Active Link State */
+.nav-link-active {
+  color: #2563eb;
+  background-color: #eff8ff;
+  font-weight: 600;
+}
+
+/* Auth Container */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: #475467;
+  font-weight: 500;
+  background-color: #f8fafc;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Action Buttons (Log out & Sign In) */
+.logout-btn,
+.login-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  display: inline-block;
+}
+
+.logout-btn:hover,
+.login-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  color: #0f172a;
+}

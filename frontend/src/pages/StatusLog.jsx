@@ -1,27 +1,42 @@
 import React from "react";
 import { useResources } from "../context/ResourceContext";
 import LogCard from "../components/LogCard";
+import { Container, CircularProgress, Alert, Box } from "@mui/material";
 
 export default function StatusLog() {
   const { resources, loading, error } = useResources();
 
-  if (loading) return <div className="loading">Loading records...</div>;
-  if (error) return <div className="error-message">{error}</div>;
-
+  if (loading) {
     return (
-    //   classnames: status-log-page, empty-state, log-list
-    <div className="status-log-page">
-      <h2>Status Log</h2>
+      <Box display="flex" justifyContent="center" py={8}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-      {!resources || resources.length === 0 ? (
-        <p className="empty-state">No status logs recorded yet.</p>
-      ) : (
-        <div className="log-list">
-          {resources.map((item) => (
-            <LogCard key={item.id} item={item} />
-          ))}
-        </div>
-      )}
-    </div>
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
+
+  return (
+    <Container maxWidth="xl" sx={{ py: 4 }}>
+      <div className="status-log-page">
+        <h2>Status Log</h2>
+
+        {!resources || resources.length === 0 ? (
+          <p className="empty-state">No records yet.</p>
+        ) : (
+          <div className="log-list">
+            {resources.map((item) => (
+              <LogCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
+      </div>
+    </Container>
   );
 }
