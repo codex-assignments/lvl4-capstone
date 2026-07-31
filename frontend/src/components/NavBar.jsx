@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../assets/Logo";
 import { NavLink, useNavigate } from "react-router";
 import { useResources } from "../context/ResourceContext";
 
@@ -16,6 +17,7 @@ const navigate = useNavigate();
   return (
     <nav className="navbar">
       <div className="nav-logo">
+        <Logo size={36} color="primary" />
         <NavLink to="/">AppTrack</NavLink>
       </div>
       <div className="nav-links">
@@ -42,13 +44,12 @@ const navigate = useNavigate();
           {token ? (
             <div className="user-menu">
               <span className="user-email">{user?.email}</span>
-              <button onClick={handleLogout} className="logout-btn">Log out</button>
+              <button onClick={handleLogout} className="logout-btn">
+                Log out
+              </button>
             </div>
           ) : (
-            <NavLink
-              to="/login"
-              className="login-btn"
-            >
+            <NavLink to="/login" className="login-btn">
               Login / Sign Up
             </NavLink>
           )}
