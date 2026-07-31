@@ -47,8 +47,8 @@ export function ResourceProvider({ children }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json();
     if (!res.ok) throw new Error("Sign-up failed.");
+    const data = await res.json();
     return data;
   }
 
@@ -65,8 +65,8 @@ export function ResourceProvider({ children }) {
     setLoading(true);
     try {
       const res = await fetch(`${BACKEND}/applications`);
-      const data = await res.json();
       if (!res.ok) throw new Error("Failed to load.");
+      const data = await res.json();
       setResources(data);
     } catch (e) {
       console.error(e);
@@ -84,7 +84,7 @@ export function ResourceProvider({ children }) {
     });
     const createdItem = await res.json();
     if (!res.ok) throw new Error("Failed to add item.");
-    setResources((prev) => [...prev, createdItem]);
+    setResources((prev) => [createdItem, ...prev]);
     return createdItem;
   }
 

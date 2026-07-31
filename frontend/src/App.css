@@ -142,7 +142,7 @@ body {
   border: 1px solid #b2ddff;
 }
 
-.status-badge.phone-screen,
+.status-badge.phone-screening,
 .status-badge.screening {
   background-color: #fffbfa;
   color: #c4320a;
@@ -380,4 +380,42 @@ body {
   background: #e2e8f0;
   border-color: #94a3b8;
   color: #0f172a;
+}
+
+/* Clean, Monochrome Copy Email Button */
+.copy-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  margin-left: 0.35rem;
+}
+
+.copy-email-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+/* Icon & Text styling */
+.copy-icon {
+  stroke: #64748b;
+}
+
+.copy-email-btn:hover .copy-icon {
+  stroke: #0f172a;
+}
+
+.copied-text {
+  color: #16a34a;
+  font-weight: 600;
+  font-size: 0.75rem;
 }

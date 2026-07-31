@@ -38,15 +38,6 @@ const navigate = useNavigate();
           Status Log
         </NavLink>
 
-        <NavLink
-          to="/manage"
-          className={({ isActive }) =>
-            isActive ? "nav-link-active nav-link" : "nav-link"
-          }
-        >
-
-        </NavLink>
-
         {/* clickable user email and logout btn, if logged in, otherwise show Sign in directing to auth component */}
         <div className="nav-auth">
           {token ? (
@@ -56,10 +47,10 @@ const navigate = useNavigate();
             </div>
           ) : (
             <NavLink
-              to="/manage"
+              to="/login"
               className="login-btn"
             >
-              Sign In
+              Login / Sign Up
             </NavLink>
           )}
         </div>

@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router";
 import { CssBaseline, Container, Box } from "@mui/material";
 import NavBar from "./components/NavBar";
 import StatusLog from "./pages/StatusLog";
+import AuthPage from "./pages/AuthPage";
 import "./App.css";
 
 export default function App() {
@@ -16,7 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<div>Dashboard View</div>} />
           <Route path="/log" element={<StatusLog />} />
-          <Route path="/manage" element={<div>Manage / Add View</div>} />
+          <Route path="/login" element={<AuthPage />} />
         </Routes>
       </Container>
     </Box>
