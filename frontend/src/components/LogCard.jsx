@@ -13,48 +13,46 @@ export default function LogCard({ item, isLoggedIn, onUpdate, onDelete }) {
     navigator.clipboard.writeText(email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    };
-    
-    const handleEditSubmit = async (payload) => {
-try {
-  if (onUpdate) {
-    await onUpdate(item.id, payload);
-  }
-  setIsEditing(false);
-} catch (err) {
-  alert("You do not have permission to edit this item.");
-}
-    };
+  };
 
-    // confirm window for delete
-    const handleDelete = async () => {
-      if (window.confirm(`Delete application for ${item.company_name}?`)) {
-        try {
-                  if (onDelete) {
+  const handleEditSubmit = async (payload) => {
+    try {
+      if (onUpdate) {
+        await onUpdate(item.id, payload);
+      }
+      setIsEditing(false);
+    } catch (err) {
+      alert("You do not have permission to edit this item.");
+    }
+  };
+
+  // confirm window for delete
+  const handleDelete = async () => {
+    if (window.confirm(`Delete application for ${item.company_name}?`)) {
+      try {
+        if (onDelete) {
           await onDelete(item.id);
         }
-        } catch (error) {
-         alert("You do not have permission to delete this item.",
-         ); 
-        }
-
+      } catch (error) {
+        alert("You do not have permission to delete this item.");
       }
-    };
-
-    // inline editing available to logged in users
-    if (isEditing) {
-      return (
-        <div className="log-card editing-card">
-          <ApplicationForm
-            initialData={item}
-            onSubmit={handleEditSubmit}
-                  onCancel={() => setIsEditing(false)}
-                //   pass parent button label
-            buttonLabel="Update Application"
-          />
-        </div>
-      );
     }
+  };
+
+  // inline editing available to logged in users
+  if (isEditing) {
+    return (
+      <div className="log-card editing-card">
+        <ApplicationForm
+          initialValues={item}
+          onSubmit={handleEditSubmit}
+          onCancel={() => setIsEditing(false)}
+          // 	 pass parent button label
+          buttonLabel="Update Application"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="log-card">
@@ -63,14 +61,28 @@ try {
           <h3 className="log-company">{item.company_name}</h3>
           <span className="log-title">{item.job_title}</span>
         </div>
-        {item.stage && (
-          <span
-            // change status to lowercase and replace every space with -
-            className={`status-badge ${item.stage.toLowerCase().replace(/\s+/g, "-")}`}
-          >
-            {item.stage}
-          </span>
-        )}
+        <div className="stage-badges-container">
+          {item.has_screening && (
+            <span className="status-badge screening">Screening</span>
+          )}
+          {item.has_technical && (
+            <span className="status-badge technical">Technical</span>
+          )}
+          {item.has_interview && (
+            <span className="status-badge interview">Interview</span>
+          )}
+          {item.has_offer && <span className="status-badge offer">Offer</span>}
+          {item.has_rejected && (
+            <span className="status-badge rejected">Rejected</span>
+          )}
+          {!item.has_screening &&
+            !item.has_technical &&
+            !item.has_interview &&
+            !item.has_offer &&
+            !item.has_rejected && (
+              <span className="status-badge applied">Applied</span>
+            )}
+        </div>
       </div>
 
       <div className="log-card-meta">
@@ -82,10 +94,9 @@ try {
             Applied: {new Date(item.date_applied).toLocaleDateString()}
           </span>
         )}
-        {item.last_contact_date && (
+        {item.last_contact && (
           <span>
-            Last Contact:{" "}
-            {new Date(item.last_contact_date).toLocaleDateString()}
+            Last Contact: {new Date(item.last_contact).toLocaleDateString()}
           </span>
         )}
       </div>
@@ -133,9 +144,9 @@ try {
         </div>
       )}
 
-      {item.resume_version_used && (
+      {item.resume_version && (
         <div className="log-resume">
-          <strong>Resume Version:</strong> {item.resume_version_used}
+          <strong>Resume Version:</strong> {item.resume_version}
         </div>
       )}
 

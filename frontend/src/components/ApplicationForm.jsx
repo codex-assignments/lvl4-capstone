@@ -2,232 +2,279 @@ import React, { useState } from "react";
 import {
   Box,
   TextField,
-  MenuItem,
   Button,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+  Typography,
   Grid,
   Paper,
-  Typography,
 } from "@mui/material";
 
-const STAGE_OPTIONS = [
-  "Applied",
-  "Phone Screening",
-  "Interviewing",
-  "Technical Assessment",
-  "Offer Received",
-  "Rejected",
-];
-
 export default function ApplicationForm({
-  initialData,
+  initialValues = {},
   onSubmit,
   onCancel,
-  buttonLabel = "Save Application",
+  buttonLabel = "Save",
 }) {
-  // if the parent doesn't pass anything, default to the string 'Save Application'
+  // if the parent doesn't pass anything, default to the string 'Save'
 
-  // if used for updating a card, use existing data
-  const [formData, setFormData] = useState({
-    company_name: initialData?.company_name || "",
-    job_title: initialData?.job_title || "",
-    stage: initialData?.stage || "Applied",
-    location: initialData?.location || "",
-    salary_range: initialData?.salary_range || "",
-    tech_stack: Array.isArray(initialData?.tech_stack)
-      ? initialData.tech_stack.join(", ")
-      : initialData?.tech_stack || "",
-    hiring_manager_name: initialData?.hiring_manager_name || "",
-    hiring_manager_email: initialData?.hiring_manager_email || "",
-    resume_version_used: initialData?.resume_version_used || "",
-    job_url: initialData?.job_url || "",
-    notes: initialData?.notes || "",
-  });
+  // if used for updating a card, use existing data of if it doesn't exist, start with empty string or false value
+const [formData, setFormData] = useState({
+  company_name: initialValues.company_name || "",
+  job_title: initialValues.job_title || "",
+  location: initialValues.location || "",
+  salary_range: initialValues.salary_range || "",
+  tech_stack: initialValues.tech_stack || "",
+  notes: initialValues.notes || "",
+  resume_version: initialValues.resume_version || "",
+  hiring_manager_name: initialValues.hiring_manager_name || "",
+  hiring_manager_email: initialValues.hiring_manager_email || "",
+  date_applied:
+    initialValues.date_applied || new Date().toISOString().split("T")[0],
+  last_contact:
+    initialValues.last_contact || new Date().toISOString().split("T")[0],
+  has_screening: initialValues.has_screening || false,
+  has_technical: initialValues.has_technical || false,
+  has_interview: initialValues.has_interview || false,
+  has_offer: initialValues.has_offer || false,
+  has_rejected: initialValues.has_rejected || false,
+});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: checked }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const payload = {
-      ...formData,
-      tech_stack: formData.tech_stack
-        ? formData.tech_stack
-            .split(",")
-            .map((tech) => tech.trim())
-            .filter(Boolean)
-        : [],
-    };
-
-    onSubmit(payload);
+    onSubmit(formData);
   };
 
   return (
-    <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: 2 }}>
-      <Typography
-        variant="h6"
-        component="h3"
-        sx={{ mb: 2, fontWeight: "bold" }}
-      >
-        {/* based on if there is already data */}
-        {initialData ? "Edit Application" : "New Application"}
+    <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+      <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+        {/* if component is used to create a new application vs editing a card */}
+        {initialValues.id ? "Edit Application" : "New Application"}
       </Typography>
 
-      <Box component="form" onSubmit={handleSubmit} noValidate>
+      <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid xs={12} sm={6}>
             <TextField
+              required
               fullWidth
               size="small"
               label="Company Name"
               name="company_name"
               value={formData.company_name}
               onChange={handleChange}
-              required
             />
           </Grid>
-
-          <Grid item xs={12} sm={6}>
+          <Grid xs={12} sm={6}>
             <TextField
+              required
               fullWidth
               size="small"
               label="Job Title"
               name="job_title"
               value={formData.job_title}
               onChange={handleChange}
-              required
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <TextField
-              select
-              fullWidth
-              size="small"
-              label="Stage"
-              name="stage"
-              value={formData.stage}
-              onChange={handleChange}
-            >
-              {STAGE_OPTIONS.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
+          <Grid xs={12} sm={6}>
             <TextField
               fullWidth
               size="small"
               label="Location"
               name="location"
-              placeholder="e.g. Remote, Baton Rouge"
+              placeholder="e.g. Remote, Baton Rouge, LA"
               value={formData.location}
               onChange={handleChange}
             />
           </Grid>
-
-          <Grid item xs={12} sm={4}>
+          <Grid xs={12} sm={6}>
             <TextField
               fullWidth
               size="small"
               label="Salary Range"
               name="salary_range"
-              placeholder=" "
+              placeholder="e.g. $75k - $85k"
               value={formData.salary_range}
               onChange={handleChange}
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Tech Stack"
-              name="tech_stack"
-              placeholder="React, Python, Supabase, etc"
-              value={formData.tech_stack}
-              onChange={handleChange}
-              helperText="Comma separated values"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
+          {/* contact and resume version */}
+          <Grid xs={12} sm={4}>
             <TextField
               fullWidth
               size="small"
               label="Resume Version"
-              name="resume_version_used"
+              name="resume_version"
               placeholder="e.g. v2_frontend.pdf"
-              value={formData.resume_version_used}
+              value={formData.resume_version}
               onChange={handleChange}
             />
           </Grid>
-
-          <Grid item xs={12} sm={6}>
+          <Grid xs={12} sm={4}>
             <TextField
               fullWidth
               size="small"
-              label="Contact Name"
+              label="Hiring Manager Name"
               name="hiring_manager_name"
               value={formData.hiring_manager_name}
               onChange={handleChange}
             />
           </Grid>
-
-          <Grid item xs={12} sm={6}>
+          <Grid xs={12} sm={4}>
             <TextField
               fullWidth
               size="small"
               type="email"
-              label="Contact Email"
+              label="Hiring Manager Email"
               name="hiring_manager_email"
               value={formData.hiring_manager_email}
               onChange={handleChange}
             />
           </Grid>
 
-          <Grid item xs={12}>
+          {/* dates */}
+          <Grid xs={12} sm={6}>
             <TextField
               fullWidth
               size="small"
-              label="Job URL"
-              name="job_url"
-              placeholder="https://..."
-              value={formData.job_url}
+              type="date"
+              label="Date Applied"
+              name="date_applied"
+              InputLabelProps={{ shrink: true }}
+              value={formData.date_applied}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid xs={12} sm={6}>
+            <TextField
+              fullWidth
+              size="small"
+              type="date"
+              label="Last Contact"
+              name="last_contact"
+              InputLabelProps={{ shrink: true }}
+              value={formData.last_contact}
               onChange={handleChange}
             />
           </Grid>
 
-          <Grid item xs={12}>
+          {/* tech stack and notes */}
+          <Grid xs={12}>
+            <TextField
+              fullWidth
+              size="small"
+              label="Tech Stack"
+              name="tech_stack"
+              placeholder="Comma separated e.g. React, Python, Flask"
+              value={formData.tech_stack}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid xs={12}>
             <TextField
               fullWidth
               multiline
-              rows={3}
+              rows={2}
+              size="small"
               label="Notes"
               name="notes"
               value={formData.notes}
               onChange={handleChange}
             />
           </Grid>
-        </Grid>
 
-        <Box
-          sx={{ display: "flex", justifyContent: "flex-end", gap: 1.5, mt: 3 }}
-        >
-          {onCancel && (
-            <Button variant="outlined" color="inherit" onClick={onCancel}>
-              Cancel
+          {/* stage checkboxes */}
+          <Grid xs={12}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: "bold", mt: 1, mb: 0.5 }}
+            >
+              Stages Completed:
+            </Typography>
+            <FormGroup row>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.has_screening}
+                    onChange={handleCheckboxChange}
+                    name="has_screening"
+                  />
+                }
+                label="Screening"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.has_technical}
+                    onChange={handleCheckboxChange}
+                    name="has_technical"
+                  />
+                }
+                label="Technical"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.has_interview}
+                    onChange={handleCheckboxChange}
+                    name="has_interview"
+                  />
+                }
+                label="Interview"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.has_offer}
+                    onChange={handleCheckboxChange}
+                    name="has_offer"
+                    color="success"
+                  />
+                }
+                label="Offer"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.has_rejected}
+                    onChange={handleCheckboxChange}
+                    name="has_rejected"
+                    color="error"
+                  />
+                }
+                label="Rejected"
+              />
+            </FormGroup>
+          </Grid>
+
+          {/* buttons */}
+          <Grid
+            xs={12}
+            sx={{ display: "flex", gap: 1, justifyContent: "flex-end", mt: 1 }}
+          >
+            {onCancel && (
+              <Button size="small" variant="outlined" onClick={onCancel}>
+                Cancel
+              </Button>
+            )}
+            <Button size="small" variant="contained" type="submit">
+              {buttonLabel}
             </Button>
-          )}
-          <Button type="submit" variant="contained" color="primary">
-            {buttonLabel}
-          </Button>
-        </Box>
+          </Grid>
+        </Grid>
       </Box>
     </Paper>
   );
