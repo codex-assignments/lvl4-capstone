@@ -8,6 +8,20 @@ export default function LogCard({ item, isLoggedIn, onUpdate, onDelete }) {
 
   if (!item) return null;
 
+  // determine highest priority stage to use on the card
+  // applied < screening < technical < interview < offer/rejected
+  const getLatestStage = (item) => {
+    if (item.has_offer) return { label: "Offer", className: "offer" };
+    if (item.has_rejected) return { label: "Rejected", className: "rejected" };
+    if (item.has_interview)
+      return { label: "Interview", className: "interview" };
+    if (item.has_technical)
+      return { label: "Technical", className: "technical" };
+    if (item.has_screening)
+      return { label: "Screening", className: "screening" };
+    return { label: "Applied", className: "applied" };
+  };
+
   // copy email to clipboard, visually indicate copied for 2 secs
   const handleCopyEmail = (email) => {
     navigator.clipboard.writeText(email);
@@ -61,28 +75,14 @@ export default function LogCard({ item, isLoggedIn, onUpdate, onDelete }) {
           <h3 className="log-company">{item.company_name}</h3>
           <span className="log-title">{item.job_title}</span>
         </div>
-        <div className="stage-badges-container">
-          {item.has_screening && (
-            <span className="status-badge screening">Screening</span>
-          )}
-          {item.has_technical && (
-            <span className="status-badge technical">Technical</span>
-          )}
-          {item.has_interview && (
-            <span className="status-badge interview">Interview</span>
-          )}
-          {item.has_offer && <span className="status-badge offer">Offer</span>}
-          {item.has_rejected && (
-            <span className="status-badge rejected">Rejected</span>
-          )}
-          {!item.has_screening &&
-            !item.has_technical &&
-            !item.has_interview &&
-            !item.has_offer &&
-            !item.has_rejected && (
-              <span className="status-badge applied">Applied</span>
-            )}
-        </div>
+        {(() => {
+          const currentStage = getLatestStage(item);
+          return (
+            <span className={`status-badge ${currentStage.className}`}>
+              {currentStage.label}
+            </span>
+          );
+        })()}
       </div>
 
       <div className="log-card-meta">
