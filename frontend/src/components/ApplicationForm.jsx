@@ -53,7 +53,16 @@ const [formData, setFormData] = useState({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+const sanitizedPayload = {
+  ...formData,
+  date_applied: formData.date_applied || null,
+  last_contact: formData.last_contact || null,
+  location: formData.location || null,
+  salary_range: formData.salary_range || null,
+  notes: formData.notes || null,
+};
+
+onSubmit(sanitizedPayload);
   };
 
   return (

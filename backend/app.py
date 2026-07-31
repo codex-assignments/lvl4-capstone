@@ -40,12 +40,16 @@ def get_resources():
 # create
 @app.post("/api/applications")
 def create_item():
-    client=get_client()
-    data = request.get_json()
-    res = client.table(TABLE).insert(data).execute()
-    if not res.data:
-        return {"error": "Unauthorized. Create item failed."}, 400
-    return res.data[0], 200
+    try: 
+        client=get_client()
+        data = request.get_json()
+        res = client.table(TABLE).insert(data).execute()
+        if not res.data:
+            return {"error": "Unauthorized. Create item failed."}, 400
+        return res.data[0], 200
+    except Exception as e: 
+        print("POST /api/applications error", str(e))
+        return {"error": str(e)}, 500
 
 # update
 @app.route("/api/applications/<int:app_id>", methods=["PATCH"])
