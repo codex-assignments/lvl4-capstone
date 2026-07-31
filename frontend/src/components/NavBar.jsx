@@ -14,7 +14,6 @@ const navigate = useNavigate();
   };
 
   return (
-    //   classnames: navbar, nav-logo, nav-links, nav-link, nav-link-active, nav-auth, user-menu,user-email, login-btn, logout-btn
     <nav className="navbar">
       <div className="nav-logo">
         <NavLink to="/">AppTrack</NavLink>

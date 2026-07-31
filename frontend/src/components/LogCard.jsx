@@ -16,18 +16,28 @@ export default function LogCard({ item, isLoggedIn, onUpdate, onDelete }) {
     };
     
     const handleEditSubmit = async (payload) => {
-      if (onUpdate) {
-        await onUpdate(item.id, payload);
-      }
-      setIsEditing(false);
+try {
+  if (onUpdate) {
+    await onUpdate(item.id, payload);
+  }
+  setIsEditing(false);
+} catch (err) {
+  alert("You do not have permission to edit this item.");
+}
     };
 
     // confirm window for delete
     const handleDelete = async () => {
       if (window.confirm(`Delete application for ${item.company_name}?`)) {
-        if (onDelete) {
+        try {
+                  if (onDelete) {
           await onDelete(item.id);
         }
+        } catch (error) {
+         alert("You do not have permission to delete this item.",
+         ); 
+        }
+
       }
     };
 

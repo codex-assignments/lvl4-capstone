@@ -37,6 +37,8 @@ cd frontend
 npm install
 # for MUI
 npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
+# for the sankey diagram on the dashboard
+npm install @nivo/core @nivo/sankey
 # update the BACKEND variable line in src/context/ResourceContext.jsx
 --> const BACKEND = "http://localhost:5000/api";
 * Alternatively, replace "http://localhost:500" with your deployed backend render url.
