@@ -22,7 +22,10 @@ def get_client():
         token = auth_header.split(" ")[1]
         user_client=create_client(SUPABASE_URL,SUPABASE_KEY)
         # attach user's Json web token to all outgoing http requests
-        user_client.postgrest.auth(token)
+        try:
+            user_client.auth.set_session(token, "")
+        except Exception:
+            user_client.postgrest.headers["Authorization"] = f"Bearer {token}"
         return user_client
     return supabase
 
