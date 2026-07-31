@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import Dashboard from "./pages/Dashboard";
 import StatusLog from "./pages/StatusLog";
 import AuthPage from "./pages/AuthPage";
+import Footer from "./components/Footer"
 import "./App.css";
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/login" element={<AuthPage />} />
         </Routes>
       </Container>
+      <Footer />
     </Box>
   );
 }

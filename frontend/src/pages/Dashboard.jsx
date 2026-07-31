@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Link } from "react-router";
 import { useResources } from "../context/ResourceContext";
 import { ResponsiveSankey } from "@nivo/sankey";
 import {
@@ -7,11 +8,12 @@ import {
   Paper,
   Typography,
   Box,
+  Button,
   CircularProgress,
   Alert,
 } from "@mui/material";
 
-export default function Dashboard() {
+export default function Dashboard({ onNavigateToStatusLog }) {
   const { resources, loading, error } = useResources();
 
   // useMemo is a React Hook that lets you cache the result of a calculation between re-renders
@@ -119,21 +121,78 @@ export default function Dashboard() {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Typography
-        variant="h4"
-        component="h1"
-        sx={{ fontWeight: "bold", mb: 4 }}
+    <Container maxWidth="xl" sx={{ py: 1 }}>
+      {/* ----- hero with call to action button ---- */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 3, md: 4 },
+          mb: 4,
+          borderRadius: 3,
+          backgroundColor: "primary.main",
+          color: "primary.contrastText",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: { xs: "flex-start", md: "center" },
+          justifyContent: "space-between",
+          gap: 3,
+        }}
       >
-        Dashboard Overview
-      </Typography>
+        <Box maxWidth="md">
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{ fontWeight: "bold", mb: 1 }}
+          >
+            Welcome to AppTrack
+          </Typography>
+          <Typography variant="body1" sx={{ opacity: 0.9 }}>
+            Track your developer job search in real-time. View key metrics below
+            or jump straight into your status log to manage applications, record
+            interview progress, and update stage statuses.
+          </Typography>
+        </Box>
+
+        <Button
+          component={Link}
+          to="/log"
+          variant="contained"
+          size="large"
+          color="secondary"
+          sx={{
+            fontWeight: "bold",
+            px: 4,
+            py: 1.5,
+            minWidth: "fit-content",
+            flexShrink: 0,
+            whiteSpace: "nowrap",
+            boxShadow: 2,
+            width: { xs: "100%", sm: "auto" },
+          }}
+        >
+          View / Manage Applications
+        </Button>
+      </Paper>
 
       {/* ---Metric Summary Cards --- */}
-      <Grid container spacing={3} sx={{ mb: 5 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Grid
+        container
+        spacing={3}
+        justifyContent="center"
+        sx={{ mb: 5, width: "100%", mx: "auto" }}
+      >
+        <Grid item xs={12} sm={6} md={3} sx={{ display: "flex", flexGrow: 1 }}>
           <Paper
             elevation={2}
-            sx={{ p: 3, borderRadius: 2, textAlign: "center" }}
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              textAlign: "center",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
           >
             <Typography
               variant="body2"
@@ -151,10 +210,18 @@ export default function Dashboard() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3} sx={{ display: "flex", flexGrow: 1 }}>
           <Paper
             elevation={2}
-            sx={{ p: 3, borderRadius: 2, textAlign: "center" }}
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              textAlign: "center",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
           >
             <Typography
               variant="body2"
@@ -172,10 +239,18 @@ export default function Dashboard() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3} sx={{ display: "flex", flexGrow: 1 }}>
           <Paper
             elevation={2}
-            sx={{ p: 3, borderRadius: 2, textAlign: "center" }}
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              textAlign: "center",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
           >
             <Typography
               variant="body2"
@@ -193,10 +268,18 @@ export default function Dashboard() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3} sx={{ display: "flex", flexGrow: 1 }}>
           <Paper
             elevation={2}
-            sx={{ p: 3, borderRadius: 2, textAlign: "center" }}
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              textAlign: "center",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
           >
             <Typography
               variant="body2"
@@ -214,11 +297,10 @@ export default function Dashboard() {
           </Paper>
         </Grid>
       </Grid>
-
       {/* --- Sankey Diagram --- */}
       <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
         <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-          Application Pipeline Flow
+          Application Pipeline
         </Typography>
 
         {!sankeyData || sankeyData.links.length === 0 ? (

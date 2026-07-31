@@ -162,11 +162,12 @@ export default function StatusLog() {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ py: 1 }}>
       <div className="status-log-page">
         <div className="status-log-header">
-          <h2>Status Log</h2>
-
+          <h2>Applications</h2>
+          {token? "" : <p>Log in to add, edit, and delete applications.</p>}
+          
           {/* show 'New Application' toggle button only when logged in */}
           {isLoggedIn && (
             <Button

@@ -13,7 +13,6 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL,SUPABASE_KEY)
 
 TABLE = "applications"
-
 # bearer token pull, used to attach to request headers when RLS would prevent someone who is not signed in to perform actions with RLS enabled.
 # for create, update, and delete -- token is captured by react on login and stored in browser local storage which is used for sending requests related to protected actions
 def get_client():
@@ -72,34 +71,6 @@ def delete_item(app_id):
     if not res.data:
         return {"error": "Unauthorized or item not found."}, 404
     return {"message": "Deleted successfully."}, 200
-
-# sign up
-@app.post("/api/signup")
-def signup():
-    auth_data = request.get_json()
-    email = auth_data.get("email")
-    password = auth_data.get("password")
-
-    if not email or not password:
-        return ({"error": "Email and password are required to sign up."}), 400
-    if len(password)<6: 
-        return ({"error": "Length of password must be at least 6 characters long."}), 400
-
-    auth_response = supabase.auth.sign_up({
-        "email": email,
-        "password": password
-    })
-    if not auth_response.user:
-        return ({"error": "Sign-up failed. Please try again."}), 400
-
-    return ({
-        "message": "User account successfully created.",
-        "user": {
-            "id": auth_response.user.id,
-            "email": auth_response.user.email,
-            "created_at": auth_response.user.created_at
-        }
-    }), 201
 
 # login
 @app.post("/api/login")
