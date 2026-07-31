@@ -34,9 +34,17 @@ export function ResourceProvider({ children }) {
     const data = await res.json();
     if (!res.ok) throw new Error("Login failed.");
     setToken(data.token);
-    setUser(data.user);
+
+    // ensure user object contains user ID for payload management
+    const userData = {
+      id: data.user.id || data.user.user_metadata?.sub,
+      email: data.user.email,
+      created_at: data.user.created_at,
+    };
+
+    setUser(userData);
     localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("user", JSON.stringify(userData));
     return data;
   }
 
@@ -77,13 +85,29 @@ export function ResourceProvider({ children }) {
 
   // create -- token saved from login required
   async function addResource(newItem) {
+    if (!user || !user.id) {
+      throw new Error("You must be logged in to create an application.");
+    }
+
+    // Frontend payload construction tied strictly to the authenticated user
+    const payload = {
+      ...newItem,
+      user_id: user.id,
+    };
+
     const res = await fetch(`${BACKEND}/applications`, {
       method: "POST",
       headers: getAuthHeaders(),
-      body: JSON.stringify(newItem),
+      body: JSON.stringify(payload),
     });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Server error message:", errText);
+      throw new Error("Failed to add item.");
+    }
+
     const createdItem = await res.json();
-    if (!res.ok) throw new Error("Failed to add item.");
     setResources((prev) => [createdItem, ...prev]);
     return createdItem;
   }
@@ -95,8 +119,14 @@ export function ResourceProvider({ children }) {
       headers: getAuthHeaders(),
       body: JSON.stringify(updatedData),
     });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Server error message:", errText);
+      throw new Error("Failed to update item.");
+    }
+
     const updatedItem = await res.json();
-    if (!res.ok) throw new Error("Failed to update item.");
     setResources((prev) =>
       prev.map((item) => (item.id === id ? updatedItem : item)),
     );
@@ -109,8 +139,14 @@ export function ResourceProvider({ children }) {
       method: "DELETE",
       headers: getAuthHeaders(),
     });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Server error message:", errText);
+      throw new Error("Failed to delete item.");
+    }
+
     const data = await res.json();
-    if (!res.ok) throw new Error("Failed to delete item.");
     setResources((prev) => prev.filter((item) => item.id !== id));
   }
 

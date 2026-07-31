@@ -25,19 +25,17 @@ export default function Dashboard() {
     let offers = 0;
 
     resources.forEach((item) => {
-      const stage = item.stage ? item.stage.toLowerCase() : "";
-
-      if (stage.includes("offer")) {
+      if (item.has_offer) {
         offers += 1;
-        active += 1;
+        if (!item.has_rejected) active += 1;
       } else if (
-        stage.includes("interview") ||
-        stage.includes("screening") ||
-        stage.includes("technical")
+        item.has_interview ||
+        item.has_technical ||
+        item.has_screening
       ) {
-        interviews += 1;
-        active += 1;
-      } else if (stage.includes("applied")) {
+        if (item.has_interview) interviews += 1;
+        if (!item.has_rejected) active += 1;
+      } else if (!item.has_rejected) {
         active += 1;
       }
     });
@@ -61,13 +59,11 @@ export default function Dashboard() {
     };
 
     resources.forEach((item) => {
-      const stage = item.stage ? item.stage.toLowerCase() : "";
-      if (stage.includes("offer")) counts.Offer += 1;
-      else if (stage.includes("interview")) counts.Interview += 1;
-      else if (stage.includes("technical")) counts.Technical += 1;
-      else if (stage.includes("screening")) counts.Screening += 1;
-      else if (stage.includes("reject")) counts.Rejected += 1;
-      else counts.Applied += 1;
+      if (item.has_screening) counts.Screening += 1;
+      if (item.has_technical) counts.Technical += 1;
+      if (item.has_interview) counts.Interview += 1;
+      if (item.has_offer) counts.Offer += 1;
+      if (item.has_rejected) counts.Rejected += 1;
     });
 
     // nodes, list of visual blocks that a sankey diagram links up from left to right for the same object
@@ -119,7 +115,7 @@ export default function Dashboard() {
     return { nodes, links };
   }, [resources]);
 
-    // loading progress animation
+  // loading progress animation
   if (loading) {
     return (
       <Box
@@ -135,7 +131,7 @@ export default function Dashboard() {
     );
   }
 
-    // error visual 
+  // error visual
   if (error) {
     return (
       <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -156,7 +152,7 @@ export default function Dashboard() {
 
       {/* ---Metric Summary Cards --- */}
       <Grid container spacing={3} sx={{ mb: 5 }}>
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Paper
             elevation={2}
             sx={{ p: 3, borderRadius: 2, textAlign: "center" }}
@@ -177,7 +173,7 @@ export default function Dashboard() {
           </Paper>
         </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Paper
             elevation={2}
             sx={{ p: 3, borderRadius: 2, textAlign: "center" }}
@@ -198,7 +194,7 @@ export default function Dashboard() {
           </Paper>
         </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Paper
             elevation={2}
             sx={{ p: 3, borderRadius: 2, textAlign: "center" }}
@@ -219,7 +215,7 @@ export default function Dashboard() {
           </Paper>
         </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Paper
             elevation={2}
             sx={{ p: 3, borderRadius: 2, textAlign: "center" }}

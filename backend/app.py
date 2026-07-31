@@ -110,6 +110,7 @@ def login():
     return {
         "token": auth_response.session.access_token,
         "user": {
+            "id": auth_response.user.id,
             "email": auth_response.user.email,
             "created_at": auth_response.user.created_at}} ,200
 
