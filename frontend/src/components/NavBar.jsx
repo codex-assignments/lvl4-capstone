@@ -6,10 +6,10 @@ import { useResources } from "../context/ResourceContext";
 export default function NavBar() {
   // bring in states and logout function
   const { token, user, logout } = useResources();
-const navigate = useNavigate();
-    
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-      logout();
+    logout();
     //   hooks can't be called inside event handlers
     navigate("/");
   };

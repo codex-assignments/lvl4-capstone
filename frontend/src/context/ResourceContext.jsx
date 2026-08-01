@@ -35,9 +35,9 @@ export function ResourceProvider({ children }) {
     if (!res.ok) throw new Error("Login failed.");
     setToken(data.token);
 
-    // ensure user object contains user ID for payload management
+    // ensure user object contains user ID 
     const userData = {
-      id: data.user.id || data.user.user_metadata?.sub,
+      id: data.user.id,
       email: data.user.email,
       created_at: data.user.created_at,
     };
@@ -45,18 +45,6 @@ export function ResourceProvider({ children }) {
     setUser(userData);
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(userData));
-    return data;
-  }
-
-  // sign up
-  async function signup(email, password) {
-    const res = await fetch(`${BACKEND}/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) throw new Error("Sign-up failed.");
-    const data = await res.json();
     return data;
   }
 
@@ -161,7 +149,6 @@ export function ResourceProvider({ children }) {
         token,
         user,
         login,
-        signup,
         logout,
         loadResources,
         addResource,

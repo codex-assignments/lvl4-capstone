@@ -166,8 +166,8 @@ export default function StatusLog() {
       <div className="status-log-page">
         <div className="status-log-header">
           <h2>Applications</h2>
-          {token? "" : <p>Log in to add, edit, and delete applications.</p>}
-          
+          {token ? "" : <p>Log in to add, edit, and delete applications.</p>}
+
           {/* show 'New Application' toggle button only when logged in */}
           {isLoggedIn && (
             <Button
