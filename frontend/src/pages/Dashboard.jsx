@@ -13,7 +13,7 @@ import {
   Alert,
 } from "@mui/material";
 
-export default function Dashboard({ onNavigateToStatusLog }) {
+export default function Dashboard() {
   const { resources, loading, error } = useResources();
 
   // useMemo is a React Hook that lets you cache the result of a calculation between re-renders
